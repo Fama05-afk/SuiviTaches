@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tableau de Suivi — Bureau DMWM Bordeaux</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f2744;
+    --navy-mid: #1a3a5c;
+    --navy-light: #1e4976;
+    --gold: #c9953a;
+    --gold-light: #e8b95a;
+    --cream: #faf8f4;
+    --white: #ffffff;
+    --gray-100: #f4f6f9;
+    --gray-200: #e8ecf2;
+    --gray-500: #8a97aa;
+    --gray-700: #4a5568;
+    --green: #1d6a35;
+    --green-bg: #d6f0e0;
+    --blue: #0b4c8c;
+    --blue-bg: #d0e4f7;
+    --orange: #7d4e00;
+    --orange-bg: #fff3cd;
+    --red: #8b0000;
+    --red-bg: #fddede;
+    --purple: #4a1d96;
+    --purple-bg: #ede9fe;
+    --slate: #374151;
+    --slate-bg: #e5e7eb;
+    --teal: #0d5e5e;
+    --teal-bg: #ccf0f0;
+    --shadow-sm: 0 1px 3px rgba(15,39,68,0.08);
+    --shadow: 0 4px 16px rgba(15,39,68,0.12);
+    --shadow-lg: 0 12px 40px rgba(15,39,68,0.18);
+    --radius: 12px;
+    --radius-sm: 6px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gray-100);
+    color: var(--navy);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+    padding: 2.5rem 2rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    border: 2px solid rgba(201,149,58,0.18);
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 40px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(201,149,58,0.12);
+  }
+  .header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .org-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    color: var(--white);
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .header-meta {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+  .meta-pill {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 0.3rem 0.9rem;
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.8);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .meta-pill svg { opacity: 0.7; }
+
+  .header-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1.1rem;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    border: none;
+    text-decoration: none;
+  }
+  .btn-gold {
+    background: var(--gold);
+    color: var(--navy);
+  }
+  .btn-gold:hover { background: var(--gold-light); transform: translateY(-1px); box-shadow: var(--shadow); }
+  .btn-ghost {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.18); }
+  .btn-danger {
+    background: #fee2e2;
+    color: #b91c1c;
+  }
+  .btn-danger:hover { background: #fecaca; }
+  .btn-success {
+    background: var(--green-bg);
+    color: var(--green);
+  }
+
+  /* ── TOOLBAR ── */
+  .toolbar {
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-200);
+    padding: 0.85rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-sm);
+  }
+  .toolbar-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .toolbar-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gray-500);
+    white-space: nowrap;
+  }
+  .filter-group {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+  .filter-btn {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    border: 1.5px solid var(--gray-200);
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--gray-700);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: white;
+  }
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--gray-100);
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    padding: 0.35rem 0.7rem;
+    transition: border-color 0.15s;
+  }
+  .search-box:focus-within { border-color: var(--navy-light); }
+  .search-box input {
+    border: none;
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    color: var(--navy);
+    width: 160px;
+    outline: none;
+  }
+  .search-box input::placeholder { color: var(--gray-500); }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    max-width: 1400px;
+    margin: 1.5rem auto 0;
+    padding: 0 2rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .stat-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 0.9rem 1.2rem;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+    min-width: 130px;
+    border-left: 3px solid transparent;
+  }
+  .stat-card.total { border-color: var(--navy); }
+  .stat-card.done { border-color: var(--green); }
+  .stat-card.progress { border-color: var(--blue); }
+  .stat-card.urgent { border-color: #dc2626; }
+  .stat-card.todo { border-color: var(--orange); }
+  .stat-dot {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .stat-info { display: flex; flex-direction: column; }
+  .stat-number { font-size: 1.4rem; font-weight: 700; line-height: 1; }
+  .stat-label { font-size: 0.7rem; color: var(--gray-500); font-weight: 500; margin-top: 0.1rem; }
+
+  /* ── MAIN TABLE ── */
+  .main {
+    max-width: 1400px;
+    margin: 1.5rem auto 3rem;
+    padding: 0 2rem;
+  }
+  .table-wrap {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+  thead tr {
+    background: var(--navy);
+  }
+  th {
+    padding: 0.85rem 0.9rem;
+    text-align: left;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.75);
+    border-bottom: none;
+    white-space: nowrap;
+    user-select: none;
+  }
+  th:nth-child(1) { width: 11%; }
+  th:nth-child(2) { width: 32%; }
+  th:nth-child(3) { width: 16%; }
+  th:nth-child(4) { width: 12%; }
+  th:nth-child(5) { width: 20%; }
+  th:nth-child(6) { width: 9%; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--gray-200);
+    transition: background 0.1s;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #f0f5ff; }
+  tbody tr.hidden { display: none; }
+
+  td {
+    padding: 0.65rem 0.9rem;
+    vertical-align: middle;
+    font-size: 0.84rem;
+    line-height: 1.4;
+  }
+
+  /* Editable cells */
+  .editable {
+    outline: none;
+    border-radius: 4px;
+    padding: 2px 4px;
+    transition: box-shadow 0.15s, background 0.15s;
+    cursor: text;
+    word-break: break-word;
+  }
+  .editable:hover {
+    background: rgba(30,73,118,0.06);
+  }
+  .editable:focus {
+    box-shadow: 0 0 0 2px var(--navy-light);
+    background: white;
+  }
+  .editable:empty:before {
+    content: attr(data-placeholder);
+    color: var(--gray-500);
+    font-style: italic;
+    pointer-events: none;
+  }
+
+  /* Commission badge */
+  .commission-badge {
+    display: inline-block;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .badge-Finance { background: #dbeafe; color: #1e40af; }
+  .badge-Enseignement { background: #ede9fe; color: #5b21b6; }
+  .badge-Cellule { background: #fce7f3; color: #9d174d; }
+  .badge-Logistique { background: #d1fae5; color: #065f46; }
+  .badge-Action { background: #ffedd5; color: #9a3412; }
+  .badge-Général { background: #f3f4f6; color: #374151; }
+
+  /* Status select */
+  .status-select {
+    appearance: none;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 1.4rem 0.25rem 0.55rem;
+    border-radius: 20px;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.45rem center;
+    background-size: 10px;
+    transition: opacity 0.15s;
+    outline: none;
+  }
+  .status-select:hover { opacity: 0.85; }
+  .s-Fait { background-color: var(--green-bg); color: var(--green); }
+  .s-En-cours { background-color: var(--blue-bg); color: var(--blue); }
+  .s-À-faire { background-color: var(--orange-bg); color: var(--orange); }
+  .s-Urgent { background-color: var(--red-bg); color: var(--red); }
+  .s-En-attente { background-color: var(--slate-bg); color: var(--slate); }
+  .s-Rappel { background-color: #fef3c7; color: #92400e; }
+  .s-À-planifier { background-color: var(--orange-bg); color: var(--orange); }
+  .s-À-appliquer { background-color: var(--teal-bg); color: var(--teal); }
+  .s-Continu { background-color: var(--blue-bg); color: var(--blue); }
+
+  /* Action buttons */
+  .row-actions { display: flex; gap: 0.4rem; align-items: center; justify-content: center; }
+  .icon-btn {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    background: transparent;
+    color: var(--gray-500);
+  }
+  .icon-btn:hover.del { background: #fee2e2; color: #dc2626; }
+  .icon-btn:hover.dup { background: var(--blue-bg); color: var(--blue); }
+
+  /* Add row */
+  .add-row-btn {
+    width: 100%;
+    padding: 0.7rem;
+    border: none;
+    border-top: 2px dashed var(--gray-200);
+    background: transparent;
+    color: var(--gray-500);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.15s;
+  }
+  .add-row-btn:hover { background: var(--gray-100); color: var(--navy); }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--gray-500);
+    display: none;
+  }
+  .empty-state.show { display: block; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--navy);
+    color: white;
+    padding: 0.7rem 1.2rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.82rem;
+    font-weight: 500;
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.25s ease;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast.success { background: var(--green); }
+  .toast.error { background: var(--red); }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(15,39,68,0.55);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(3px);
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: white;
+    border-radius: var(--radius);
+    padding: 2rem;
+    width: min(460px, 90vw);
+    box-shadow: var(--shadow-lg);
+  }
+  .modal h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--navy);
+    margin-bottom: 1rem;
+  }
+  .modal p { font-size: 0.88rem; color: var(--gray-700); line-height: 1.6; margin-bottom: 1.5rem; }
+  .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
+
+  /* Print */
+  @media print {
+    .toolbar, .header-actions, .row-actions, .add-row-btn, .toast, .stats-bar { display: none !important; }
+    header { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .main { margin: 0; padding: 0; }
+    .table-wrap { box-shadow: none; }
+    body { background: white; }
+  }
+
+  @media (max-width: 768px) {
+    .toolbar-inner { gap: 0.5rem; }
+    th:nth-child(5), td:nth-child(5) { display: none; }
+    .stats-bar { gap: 0.5rem; }
+    .stat-card { min-width: 100px; }
+    header { padding: 1.5rem 1rem; }
+    .main { padding: 0 1rem; }
+    .toolbar { padding: 0.75rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="header-top">
+      <div>
+        <div class="org-label">DMWM — Section Bordeaux</div>
+        <h1>Tableau de Suivi<br>Réunion du Bureau</h1>
+        <div class="header-meta">
+          <span class="meta-pill">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Dimanche 30 novembre 2025
+          </span>
+          <span class="meta-pill">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            8 membres présents
+          </span>
+          <span class="meta-pill">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+            ~20h15 – 23h00
+          </span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-ghost" onclick="printPage()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Imprimer
+        </button>
+        <button class="btn btn-ghost" onclick="exportCSV()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Exporter CSV
+        </button>
+        <button class="btn btn-ghost" onclick="confirmReset()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.79"/></svg>
+          Réinitialiser
+        </button>
+        <button class="btn btn-gold" onclick="saveData()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Sauvegarder
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="toolbar-inner">
+    <span class="toolbar-label">Filtres :</span>
+    <div class="filter-group">
+      <button class="filter-btn active" data-filter="all" onclick="setFilter('all', this)">Tout</button>
+      <button class="filter-btn" data-filter="Finance" onclick="setFilter('Finance', this)">Finance</button>
+      <button class="filter-btn" data-filter="Enseignement" onclick="setFilter('Enseignement', this)">Enseignement</button>
+      <button class="filter-btn" data-filter="Cellule" onclick="setFilter('Cellule', this)">Cellule Féminine</button>
+      <button class="filter-btn" data-filter="Logistique" onclick="setFilter('Logistique', this)">Logistique</button>
+      <button class="filter-btn" data-filter="Action" onclick="setFilter('Action', this)">Action Sociale</button>
+      <button class="filter-btn" data-filter="Général" onclick="setFilter('Général', this)">Général</button>
+    </div>
+    <div class="search-box">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8a97aa" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" placeholder="Rechercher…" oninput="doSearch(this.value)">
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar" id="statsBar"></div>
+
+<!-- TABLE -->
+<div class="main">
+  <div class="table-wrap">
+    <table id="mainTable">
+      <thead>
+        <tr>
+          <th>Commission</th>
+          <th>Action / Point</th>
+          <th>Responsable</th>
+          <th>Statut</th>
+          <th>Remarques</th>
+          <th style="text-align:center">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+    <div class="empty-state" id="emptyState">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8a97aa" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <p style="margin-top:0.5rem">Aucun résultat trouvé</p>
+    </div>
+    <button class="add-row-btn" onclick="addRow()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Ajouter une ligne
+    </button>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="resetModal">
+  <div class="modal">
+    <h3>Réinitialiser le tableau ?</h3>
+    <p>Cette action supprimera toutes vos modifications et restaurera les données d'origine de la réunion du 30 novembre 2025. Cette action est irréversible.</p>
+    <div class="modal-actions">
+      <button class="btn" style="background:var(--gray-100);color:var(--gray-700)" onclick="closeModal()">Annuler</button>
+      <button class="btn btn-danger" onclick="resetData()">Réinitialiser</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────
+const STORAGE_KEY = 'dmwm_bureau_tableau_v1';
+
+const DEFAULT_DATA = [
+  { id: 1,  commission: 'Finance',        action: 'Clôture budget 2025',                                                       responsable: 'Fadiama Diallo',    statut: 'Fait',        remarques: '' },
+  { id: 2,  commission: 'Finance',        action: 'Ouverture budget 2026 (déc. 2025 – oct. 2026)',                             responsable: 'Fadiama Diallo',    statut: 'En cours',    remarques: '' },
+  { id: 3,  commission: 'Finance',        action: 'Trouver un moyen stratégique pour maintenir un fonds de caisse plus élevé', responsable: 'Commission Finance',statut: 'À faire',     remarques: '' },
+  { id: 4,  commission: 'Finance',        action: 'Proposer un plan de versement périodique à la commission Action Sociale (semestre)', responsable: 'Commission Finance', statut: 'À faire', remarques: '' },
+  { id: 5,  commission: 'Finance',        action: 'Rappel : valider les achats (ex. tapis) au niveau du bureau avant engagement', responsable: 'Toutes commissions', statut: 'Rappel', remarques: '' },
+  { id: 6,  commission: 'Enseignement',   action: 'Réécoutes des UR passées commentées en binôme (liste membres actifs)',      responsable: 'Soxna Ndeye Diop', statut: 'En cours',    remarques: '' },
+  { id: 7,  commission: 'Enseignement',   action: 'Relancer le programme Ziwadj (en attente de document)',                     responsable: 'Soxna Ndeye Diop', statut: 'En attente',  remarques: 'Document manquant' },
+  { id: 8,  commission: 'Cellule',        action: 'Reprendre les activités (programme prêt, réajustements en cours)',          responsable: 'Marème Samba',      statut: 'À faire',     remarques: '' },
+  { id: 9,  commission: 'Cellule',        action: 'Organiser collations simples pour le Ramadan + coordination ndogu',         responsable: 'Marème Samba',      statut: 'À planifier', remarques: '' },
+  { id: 10, commission: 'Logistique',     action: 'Finaliser l\'ouverture du compte bancaire (réunion d\'urgence avant fin de semaine)', responsable: 'Mame Maodo Niang', statut: 'Urgent', remarques: 'Statut asso / accès financement' },
+  { id: 11, commission: 'Logistique',     action: 'Décider : changer le nom de l\'association OU créer une nouvelle association', responsable: 'Bureau',          statut: 'Urgent',      remarques: '' },
+  { id: 12, commission: 'Logistique',     action: 'Suspension temporaire des GA à la salle de la mairie (à confirmer)',        responsable: 'Bureau',            statut: 'En attente',  remarques: '' },
+  { id: 13, commission: 'Action',         action: 'Continuer programme aide nouveaux (cartes Auchan, vêtements – restes chez Ndiaya)', responsable: 'Ndiaya Lo', statut: 'En cours',  remarques: '' },
+  { id: 14, commission: 'Action',         action: 'Gestion caisse : solliciter les mboks pour cas non urgents',                responsable: 'Ndiaya Lo',         statut: 'À appliquer', remarques: 'Réserver caisse aux urgences' },
+  { id: 15, commission: 'Action',         action: 'Accompagner les nouveaux dans les démarches (contrats de travail, etc.)',   responsable: 'Ndiaya Lo',         statut: 'À faire',     remarques: '' },
+  { id: 16, commission: 'Action',         action: 'Jumelage des nouveaux',                                                     responsable: 'Ndiaya Lo',         statut: 'Fait',        remarques: '' },
+  { id: 17, commission: 'Général',        action: 'Atelier MACIF – renvoyé à la réunion d\'urgence',                          responsable: 'Bureau',            statut: 'En attente',  remarques: '' },
+  { id: 18, commission: 'Général',        action: 'Organisation rencontre commission enseignement axe Bordeaux – renvoyé à réunion d\'urgence', responsable: 'Bureau', statut: 'En attente', remarques: '' },
+  { id: 19, commission: 'Général',        action: 'Respecter les canaux de transmission d\'information (rappel à toutes commissions)', responsable: 'Toutes commissions', statut: 'Rappel', remarques: '' },
+  { id: 20, commission: 'Général',        action: 'Tenir les réunions de section tous les 6 mois',                            responsable: 'Bureau',            statut: 'À planifier', remarques: '' },
+  { id: 21, commission: 'Général',        action: 'Maintenir le tableau de suivi à jour',                                     responsable: 'Bureau',            statut: 'Continu',     remarques: '' },
+];
+
+const STATUTS = ['Fait','En cours','À faire','Urgent','En attente','Rappel','À planifier','À appliquer','Continu'];
+
+const COMMISSION_LABELS = {
+  Finance: 'Finance',
+  Enseignement: 'Enseignement',
+  Cellule: 'Cellule Féminine',
+  Logistique: 'Logistique',
+  Action: 'Action Sociale',
+  Général: 'Général',
+};
+
+let data = [];
+let currentFilter = 'all';
+let currentSearch = '';
+let nextId = 100;
+
+// ── INIT ──────────────────────────────────────────────────────────────
+function init() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      data = parsed.rows || DEFAULT_DATA;
+      nextId = parsed.nextId || 100;
+    } catch(e) { data = DEFAULT_DATA.map(r => ({...r})); }
+  } else {
+    data = DEFAULT_DATA.map(r => ({...r}));
+  }
+  render();
+  updateStats();
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────
+function render() {
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+
+  let visible = 0;
+  data.forEach(row => {
+    const tr = buildRow(row);
+    const isVisible = matchesFilter(row) && matchesSearch(row);
+    if (!isVisible) tr.classList.add('hidden');
+    else visible++;
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById('emptyState').classList.toggle('show', visible === 0);
+  updateStats();
+}
+
+function buildRow(row) {
+  const tr = document.createElement('tr');
+  tr.dataset.id = row.id;
+
+  // Commission
+  const commKey = row.commission;
+  const commLabel = COMMISSION_LABELS[commKey] || commKey;
+  const badgeClass = 'badge-' + commKey;
+  const tdComm = document.createElement('td');
+  tdComm.innerHTML = `<select class="commission-select" onchange="updateField(${row.id},'commission',this.value);renderBadge(this)">${
+    Object.entries(COMMISSION_LABELS).map(([k,v]) => `<option value="${k}" ${k===commKey?'selected':''}>${v}</option>`).join('')
+  }</select>`;
+  // Style the select as a badge
+  const sel = tdComm.querySelector('select');
+  styleBadge(sel, commKey);
+  sel.style.cssText += ';border:none;padding:0.2rem 1.4rem 0.2rem 0.55rem;border-radius:4px;font-size:0.72rem;font-weight:600;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'8\' height=\'5\' viewBox=\'0 0 10 6\'%3E%3Cpath d=\'M1 1l4 4 4-4\' stroke=\'%23888\' stroke-width=\'1.5\' fill=\'none\' stroke-linecap=\'round\'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.3rem center;background-size:8px;font-family:DM Sans,sans-serif;';
+  tr.appendChild(tdComm);
+
+  // Action
+  const tdAction = document.createElement('td');
+  const divAction = document.createElement('div');
+  divAction.className = 'editable';
+  divAction.contentEditable = 'true';
+  divAction.dataset.placeholder = 'Décrire l\'action…';
+  divAction.textContent = row.action;
+  divAction.addEventListener('input', () => updateField(row.id, 'action', divAction.textContent));
+  divAction.addEventListener('keydown', e => { if(e.key==='Enter'){e.preventDefault();} });
+  tdAction.appendChild(divAction);
+  tr.appendChild(tdAction);
+
+  // Responsable
+  const tdResp = document.createElement('td');
+  const divResp = document.createElement('div');
+  divResp.className = 'editable';
+  divResp.contentEditable = 'true';
+  divResp.dataset.placeholder = 'Responsable…';
+  divResp.textContent = row.responsable;
+  divResp.addEventListener('input', () => updateField(row.id, 'responsable', divResp.textContent));
+  divResp.addEventListener('keydown', e => { if(e.key==='Enter'){e.preventDefault();} });
+  tdResp.appendChild(divResp);
+  tr.appendChild(tdResp);
+
+  // Statut
+  const tdStatut = document.createElement('td');
+  const selStatut = document.createElement('select');
+  selStatut.className = 'status-select';
+  STATUTS.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s;
+    opt.textContent = s;
+    if (s === row.statut) opt.selected = true;
+    selStatut.appendChild(opt);
+  });
+  applyStatusStyle(selStatut, row.statut);
+  selStatut.addEventListener('change', () => {
+    updateField(row.id, 'statut', selStatut.value);
+    applyStatusStyle(selStatut, selStatut.value);
+    updateStats();
+  });
+  tdStatut.appendChild(selStatut);
+  tr.appendChild(tdStatut);
+
+  // Remarques
+  const tdRem = document.createElement('td');
+  const divRem = document.createElement('div');
+  divRem.className = 'editable';
+  divRem.contentEditable = 'true';
+  divRem.dataset.placeholder = 'Ajouter une remarque…';
+  divRem.textContent = row.remarques;
+  divRem.style.color = '#6b7280';
+  divRem.style.fontSize = '0.8rem';
+  divRem.addEventListener('input', () => updateField(row.id, 'remarques', divRem.textContent));
+  divRem.addEventListener('keydown', e => { if(e.key==='Enter'){e.preventDefault();} });
+  tdRem.appendChild(divRem);
+  tr.appendChild(tdRem);
+
+  // Actions
+  const tdAct = document.createElement('td');
+  tdAct.innerHTML = `
+    <div class="row-actions">
+      <button class="icon-btn dup" title="Dupliquer" onclick="duplicateRow(${row.id})">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>
+      <button class="icon-btn del" title="Supprimer" onclick="deleteRow(${row.id})">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+      </button>
+    </div>`;
+  tr.appendChild(tdAct);
+
+  return tr;
+}
+
+function styleBadge(el, key) {
+  const map = {
+    Finance:       { bg: '#dbeafe', color: '#1e40af' },
+    Enseignement:  { bg: '#ede9fe', color: '#5b21b6' },
+    Cellule:       { bg: '#fce7f3', color: '#9d174d' },
+    Logistique:    { bg: '#d1fae5', color: '#065f46' },
+    Action:        { bg: '#ffedd5', color: '#9a3412' },
+    Général:       { bg: '#f3f4f6', color: '#374151' },
+  };
+  const style = map[key] || map['Général'];
+  el.style.backgroundColor = style.bg;
+  el.style.color = style.color;
+}
+
+function renderBadge(sel) {
+  const val = sel.value;
+  styleBadge(sel, val);
+  updateField(parseInt(sel.closest('tr').dataset.id), 'commission', val);
+  render();
+}
+
+function applyStatusStyle(sel, statut) {
+  sel.className = 'status-select s-' + statut.replace(/\s+/g, '-').replace(/[àâ]/g, 'a').replace('é','e').replace('è','e').replace('ê','e').replace('û','u').replace('î','i').replace('ô','o');
+  // Manually map to CSS classes
+  const map = {
+    'Fait': 's-Fait',
+    'En cours': 's-En-cours',
+    'À faire': 's-À-faire',
+    'Urgent': 's-Urgent',
+    'En attente': 's-En-attente',
+    'Rappel': 's-Rappel',
+    'À planifier': 's-À-planifier',
+    'À appliquer': 's-À-appliquer',
+    'Continu': 's-Continu',
+  };
+  sel.className = 'status-select ' + (map[statut] || 's-En-attente');
+}
+
+// ── CRUD ──────────────────────────────────────────────────────────────
+function updateField(id, field, value) {
+  const row = data.find(r => r.id === id);
+  if (row) { row[field] = value; autoSave(); }
+}
+
+function addRow() {
+  const newRow = { id: nextId++, commission: 'Général', action: '', responsable: '', statut: 'À faire', remarques: '' };
+  data.push(newRow);
+  render();
+  // Focus on new row's action field
+  setTimeout(() => {
+    const tr = document.querySelector(`tr[data-id="${newRow.id}"]`);
+    if (tr) {
+      const editable = tr.querySelectorAll('.editable')[0];
+      if (editable) editable.focus();
+    }
+  }, 50);
+  autoSave();
+}
+
+function duplicateRow(id) {
+  const original = data.find(r => r.id === id);
+  if (!original) return;
+  const idx = data.indexOf(original);
+  const copy = { ...original, id: nextId++ };
+  data.splice(idx + 1, 0, copy);
+  render();
+  autoSave();
+  toast('Ligne dupliquée', 'success');
+}
+
+function deleteRow(id) {
+  data = data.filter(r => r.id !== id);
+  render();
+  autoSave();
+}
+
+// ── FILTER / SEARCH ───────────────────────────────────────────────────
+function setFilter(val, btn) {
+  currentFilter = val;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+
+function doSearch(val) {
+  currentSearch = val.toLowerCase();
+  applyFilters();
+}
+
+function matchesFilter(row) {
+  if (currentFilter === 'all') return true;
+  return row.commission === currentFilter;
+}
+
+function matchesSearch(row) {
+  if (!currentSearch) return true;
+  return [row.commission, row.action, row.responsable, row.statut, row.remarques]
+    .some(v => v.toLowerCase().includes(currentSearch));
+}
+
+function applyFilters() {
+  let visible = 0;
+  document.querySelectorAll('#tableBody tr').forEach(tr => {
+    const id = parseInt(tr.dataset.id);
+    const row = data.find(r => r.id === id);
+    if (!row) return;
+    const show = matchesFilter(row) && matchesSearch(row);
+    tr.classList.toggle('hidden', !show);
+    if (show) visible++;
+  });
+  document.getElementById('emptyState').classList.toggle('show', visible === 0);
+}
+
+// ── STATS ─────────────────────────────────────────────────────────────
+function updateStats() {
+  const total = data.length;
+  const fait = data.filter(r => r.statut === 'Fait').length;
+  const enCours = data.filter(r => r.statut === 'En cours' || r.statut === 'Continu').length;
+  const urgent = data.filter(r => r.statut === 'Urgent').length;
+  const todo = data.filter(r => ['À faire','À planifier','À appliquer'].includes(r.statut)).length;
+
+  const bar = document.getElementById('statsBar');
+  bar.innerHTML = `
+    <div class="stat-card total">
+      <div class="stat-dot" style="background:#dbeafe">📋</div>
+      <div class="stat-info"><span class="stat-number" style="color:var(--navy)">${total}</span><span class="stat-label">Total actions</span></div>
+    </div>
+    <div class="stat-card done">
+      <div class="stat-dot" style="background:var(--green-bg)">✅</div>
+      <div class="stat-info"><span class="stat-number" style="color:var(--green)">${fait}</span><span class="stat-label">Fait</span></div>
+    </div>
+    <div class="stat-card progress">
+      <div class="stat-dot" style="background:var(--blue-bg)">🔵</div>
+      <div class="stat-info"><span class="stat-number" style="color:var(--blue)">${enCours}</span><span class="stat-label">En cours</span></div>
+    </div>
+    <div class="stat-card urgent">
+      <div class="stat-dot" style="background:var(--red-bg)">🔴</div>
+      <div class="stat-info"><span class="stat-number" style="color:#dc2626">${urgent}</span><span class="stat-label">Urgent</span></div>
+    </div>
+    <div class="stat-card todo">
+      <div class="stat-dot" style="background:var(--orange-bg)">📌</div>
+      <div class="stat-info"><span class="stat-number" style="color:var(--orange)">${todo}</span><span class="stat-label">À faire</span></div>
+    </div>
+  `;
+}
+
+// ── SAVE / LOAD ───────────────────────────────────────────────────────
+function autoSave() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ rows: data, nextId }));
+  } catch(e) {}
+}
+
+function saveData() {
+  autoSave();
+  toast('✓ Sauvegardé avec succès', 'success');
+}
+
+function confirmReset() {
+  document.getElementById('resetModal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('resetModal').classList.remove('show');
+}
+
+function resetData() {
+  data = DEFAULT_DATA.map(r => ({...r}));
+  nextId = 100;
+  localStorage.removeItem(STORAGE_KEY);
+  closeModal();
+  render();
+  toast('Tableau réinitialisé', '');
+}
+
+// ── EXPORT CSV ────────────────────────────────────────────────────────
+function exportCSV() {
+  const headers = ['Commission','Action','Responsable','Statut','Remarques'];
+  const rows = data.map(r => [
+    COMMISSION_LABELS[r.commission] || r.commission,
+    r.action, r.responsable, r.statut, r.remarques
+  ].map(v => '"' + String(v).replace(/"/g, '""') + '"').join(','));
+  const csv = '\uFEFF' + [headers.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'tableau_suivi_30nov2025.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('CSV exporté', 'success');
+}
+
+function printPage() { window.print(); }
+
+// ── TOAST ─────────────────────────────────────────────────────────────
+function toast(msg, type = '') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast ' + type;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// ── MODAL CLOSE ON OVERLAY ────────────────────────────────────────────
+document.getElementById('resetModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ── AUTO-SAVE ON VISIBILITY CHANGE ───────────────────────────────────
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') autoSave();
+});
+
+// ── START ─────────────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
